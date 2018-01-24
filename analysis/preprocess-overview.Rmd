@@ -1,0 +1,84 @@
+---
+title: "Data preprocessing overview"
+author: "Joyce Hsiao"
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+
+1. Download genotypes
+
+* Use `download-genotypes.sh`. Save genotypes to `genotypes/`
+
+* `genotypes/` contains genotypes and snps for hg38(GRCh38) in 1000 Genomes Project. 
+Note that these are based on dbSNP149 and a "liftover" mapping from the GRCh37 
+genome assembly used by the 1000 Genomes Project to the newer GRCh38 assembly. 
+
+Link to 1000 Genomes Project: http://www.internationalgenome.org/announcements/
+Link to data: http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/GRCh38_positions/
+
+$~$
+
+2. Get genotypes for the individual included in the experiment
+
+* Use `get-genotypes-18489.sh`. 
+
+* `genotypes-18489/` contains genotypes for NA18489 extracted from 1000 Genome Project Phase 3.
+
+$~$
+
+3. Preprocess bam files
+
+* Use `parse-bam-index.sh`
+
+* demuxlet requires UMI and cell barcode fields. 
+
+* `bam_indexed/` contains bam file from human-chimp mix ready for analysis.
+
+* `bam-indexed-human-control/` contains bam file from a single human sample.
+
+$~$
+
+4. Prepare allele information
+
+* Make a table that contains individual genotypes, reference/alternative genotypes, and ancestral genotypes. This table is used as reference for subsetting VCF files.
+
+* `preprocess.sh`
+
+* `genotypes-18489-tmp/chr${chr_num}.genotypes.txt` contains output data.
+
+$~$
+
+5. Make psuedo genotype for ancestral allele
+
+* `code/make-ancestral.sh`
+
+* `code/vcfconcat` to combine VCF files.
+
+6. Apply demuxlet
+
+`demuxlet.sh`
+
+
+
+
