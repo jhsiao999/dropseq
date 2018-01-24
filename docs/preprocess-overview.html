@@ -12,7 +12,7 @@
 <meta name="author" content="Joyce Hsiao" />
 
 
-<title>Methods description</title>
+<title>Data preprocessing overview</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -303,7 +303,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Methods description</h1>
+<h1 class="title toc-ignore">Data preprocessing overview</h1>
 <h4 class="author"><em>Joyce Hsiao</em></h4>
 
 </div>
@@ -318,81 +318,53 @@ shared across the workflowr files. -->
  package git2r is installed -->
 <p><strong>Code version:</strong> 3e19cb6</p>
 <!-- Add your analysis here -->
-<div id="motivation" class="section level2">
-<h2>Motivation</h2>
-<p>For identifying and distingushing single cell samples from human and chimp individuals in a single Dropseq run.</p>
-</div>
-<div id="data" class="section level2">
-<h2>Data</h2>
-<p>Pilot data: Yoruba cell line 18489 was included in the human-chimp mix. This is a female individual.</p>
-<p>Human reference: snps.grch37.exons.vcf.gz. For how the human vcf was generated, see here <a href="https://github.com/jdblischak/singleCellSeq/blob/master/code/verify-bam.py" class="uri">https://github.com/jdblischak/singleCellSeq/blob/master/code/verify-bam.py</a></p>
-</div>
-<div id="approach" class="section level2">
-<h2>Approach</h2>
-<p>I’ll describe the approach in steps here:</p>
 <ol style="list-style-type: decimal">
-<li><p>Map all samples to human genome</p></li>
-<li><p>Assume that the human individual is genotyped, we can obtain this individual’s genotype from the 1000 Human Genome project.</p></li>
-<li><p>Select a set of SNP positions that are likely to distinguish chimp from human indivduals.</p></li>
+<li>Download genotypes</li>
 </ol>
-<p>Step 3 provides a subset of SNP positions that are then used in demuxlet to estimate likelihood of observed SNP profile given the known sample genotypes. We considered several rules in selecting SNPs and produced demuxlet results under different combination of these rules.</p>
-<p>R1: ancestral alelle is identified as present at the select SNP position</p>
-<p>R2: there was no sufficient information to identify ancestral alelle at the select SNP position</p>
-<p>R3: ancestral alele is identified as absent at the select position</p>
-<p>R4: individual genotype is not identical to the population genotype</p>
-</div>
-<div id="scenarios-in-step-3" class="section level2">
-<h2>Scenarios in Step 3</h2>
-<p>Scenario 1:<br />
-R1. Include snp positions identified to have ancestral allele<br />
-R2. Keep snp positions at which 18489 genotype is not the same as the major/reference genotype<br />
-R3. Let the pseudo chimp be the major/reference genotype</p>
-<p>Comments: but under this scenarior, many of the 18489 genotypes can also match to the<br />
-major/reference, unelss it’s a minor allele</p>
-<p>Scenario 2: R4. Inclde snp positions identified to have or to not have ancestral allele R2. Keep snp positions at which 18489 genotype is not the same as the major/reference genotype R3. Let the pseudo chimp be the major/reference genotype</p>
-<p>Scenario 3: R1. Include snp positions identified to have ancestral allele R3. Let the pseudo chimp be the major/reference genotype</p>
-<p>Scenario 4: R4. Inclde snp positions identified to have or to not have ancestral allele R3. Let the pseudo chimp be the major/reference genotype</p>
-<p>Scenario 5: R5. Inclde snp positions not identifed to have ancestral allele R3. Let the pseudo chimp be the major/reference genotype</p>
-<p>Other scenarios:</p>
 <ul>
-<li><p>Test human control bam file</p></li>
-<li>Multiple genotyped individuals</li>
+<li><p>Use <code>download-genotypes.sh</code>. Save genotypes to <code>genotypes/</code></p></li>
+<li><p><code>genotypes/</code> contains genotypes and snps for hg38(GRCh38) in 1000 Genomes Project. Note that these are based on dbSNP149 and a “liftover” mapping from the GRCh37 genome assembly used by the 1000 Genomes Project to the newer GRCh38 assembly.</p></li>
 </ul>
-<ol style="list-style-type: decimal">
-<li>Include genotypes from 6 human individuals (data 18498 and in addition 18499)</li>
-<li>Can demuxlet correctly distinguish these two?</li>
+<p>Link to 1000 Genomes Project: <a href="http://www.internationalgenome.org/announcements/" class="uri">http://www.internationalgenome.org/announcements/</a> Link to data: <a href="http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/GRCh38_positions/" class="uri">http://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/supporting/GRCh38_positions/</a></p>
+<p><span class="math inline">\(~\)</span></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Get genotypes for the individual included in the experiment</li>
 </ol>
-<p>Results: demuxlet assigns chimps to human and returns many doublets…</p>
-<hr />
-</div>
-<div id="session-information" class="section level2">
-<h2>Session information</h2>
-<!-- Insert the session information into the document -->
-<pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>R version 3.4.1 (2017-06-30)
-Platform: x86_64-redhat-linux-gnu (64-bit)
-Running under: Scientific Linux 7.2 (Nitrogen)
-
-Matrix products: default
-BLAS/LAPACK: /usr/lib64/R/lib/libRblas.so
-
-locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] compiler_3.4.1  backports_1.1.2 magrittr_1.5    rprojroot_1.3-1
- [5] tools_3.4.1     htmltools_0.3.6 yaml_2.1.16     Rcpp_0.12.14   
- [9] stringi_1.1.6   rmarkdown_1.8   knitr_1.17      git2r_0.20.0   
-[13] stringr_1.2.0   digest_0.6.13   evaluate_0.10.1</code></pre>
-</div>
+<ul>
+<li><p>Use <code>get-genotypes-18489.sh</code>.</p></li>
+<li><p><code>genotypes-18489/</code> contains genotypes for NA18489 extracted from 1000 Genome Project Phase 3.</p></li>
+</ul>
+<p><span class="math inline">\(~\)</span></p>
+<ol start="3" style="list-style-type: decimal">
+<li>Preprocess bam files</li>
+</ol>
+<ul>
+<li><p>Use <code>parse-bam-index.sh</code></p></li>
+<li><p>demuxlet requires UMI and cell barcode fields.</p></li>
+<li><p><code>bam_indexed/</code> contains bam file from human-chimp mix ready for analysis.</p></li>
+<li><p><code>bam-indexed-human-control/</code> contains bam file from a single human sample.</p></li>
+</ul>
+<p><span class="math inline">\(~\)</span></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Prepare allele information</li>
+</ol>
+<ul>
+<li><p>Make a table that contains individual genotypes, reference/alternative genotypes, and ancestral genotypes. This table is used as reference for subsetting VCF files.</p></li>
+<li><p><code>preprocess.sh</code></p></li>
+<li><p><code>genotypes-18489-tmp/chr${chr_num}.genotypes.txt</code> contains output data.</p></li>
+</ul>
+<p><span class="math inline">\(~\)</span></p>
+<ol start="5" style="list-style-type: decimal">
+<li>Make psuedo genotype for ancestral allele</li>
+</ol>
+<ul>
+<li><p><code>code/make-ancestral.sh</code></p></li>
+<li><p><code>code/vcfconcat</code> to combine VCF files.</p></li>
+</ul>
+<ol start="6" style="list-style-type: decimal">
+<li>Apply demuxlet</li>
+</ol>
+<p><code>demuxlet.sh</code></p>
 
 <hr>
 <p>
