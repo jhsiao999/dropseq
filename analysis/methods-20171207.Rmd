@@ -1,0 +1,110 @@
+---
+title: "Methods description"
+author: "Joyce Hsiao"
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+## Motivation
+
+For identifying and distingushing single cell samples from human and chimp 
+individuals in a single Dropseq run.
+
+
+## Data
+
+Pilot data: Yoruba cell line 18489 was included in the human-chimp mix. This is a female individual.
+
+Human reference: snps.grch37.exons.vcf.gz. For how the human vcf was generated, see here https://github.com/jdblischak/singleCellSeq/blob/master/code/verify-bam.py
+
+
+## Approach
+
+I'll describe the approach in steps here:
+
+1. Map all samples to human genome
+
+2. Assume that the human individual is genotyped, we can obtain this individual's genotype
+from the 1000 Human Genome project.
+
+3. Select a set of SNP positions that are likely to distinguish chimp from human indivduals.
+
+Step 3 provides a subset of SNP positions that are then used in demuxlet to estimate likelihood
+of observed SNP profile given the known sample genotypes. We considered several rules in
+selecting SNPs and produced demuxlet results under different combination of these rules.
+
+R1: ancestral alelle is identified as present at the select SNP position
+
+R2: there was no sufficient information to identify ancestral alelle at the select SNP position
+
+R3: ancestral alele is identified as absent at the select position 
+
+R4: individual genotype is not identical to the population genotype
+
+
+## Scenarios in Step 3
+
+Scenario 1:  
+  R1. Include snp positions identified to have ancestral allele  
+  R2. Keep snp positions at which 18489 genotype is not the same as the major/reference genotype  
+  R3. Let the pseudo chimp be the major/reference genotype  
+
+Comments: but under this scenarior, many of the 18489 genotypes can also match to the   
+major/reference, unelss it's a minor allele
+
+Scenario 2:
+  R4. Inclde snp positions identified to have or to not have ancestral allele
+  R2. Keep snp positions at which 18489 genotype is not the same as the major/reference genotype
+  R3. Let the pseudo chimp be the major/reference genotype
+
+Scenario 3:
+  R1. Include snp positions identified to have ancestral allele
+  R3. Let the pseudo chimp be the major/reference genotype
+
+Scenario 4:
+  R4. Inclde snp positions identified to have or to not have ancestral allele
+  R3. Let the pseudo chimp be the major/reference genotype
+
+Scenario 5:
+  R5. Inclde snp positions not identifed to have ancestral allele
+  R3. Let the pseudo chimp be the major/reference genotype
+
+
+Other scenarios:
+
+* Test human control bam file
+
+* Multiple genotyped individuals 
+  1. Include genotypes from 6 human individuals (data 18498 and in addition 18499)
+  2. Can demuxlet correctly distinguish these two?
+
+Results: demuxlet assigns chimps to human and returns many doublets...
+
+
+---
+
+## Session information
+
+<!-- Insert the session information into the document -->
+```{r session-info}
+```
