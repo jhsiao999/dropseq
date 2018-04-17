@@ -1,0 +1,58 @@
+---
+title: "Methods description"
+output: html_document
+---
+
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+```{r read-chunk, include=FALSE, cache=FALSE}
+knitr::read_chunk("chunks.R")
+```
+
+<!-- Update knitr chunk options -->
+```{r knitr-opts-chunk, include=FALSE}
+```
+
+<!-- Insert the date the file was last updated -->
+```{r last-updated, echo=FALSE, results='asis'}
+```
+
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+```{r code-version, echo=FALSE, results='asis'}
+```
+
+<!-- Add your analysis here -->
+
+## Motivation
+
+For identifying and distingushing single cell samples from human and chimp 
+individuals in a single Dropseq run.
+
+
+## Data
+
+Pilot data: Yoruba cell line 18489 was included in the human-chimp mix. This is a female individual.
+
+Human reference: snps.grch37.exons.vcf.gz. For how the human vcf was generated, see here https://github.com/jdblischak/singleCellSeq/blob/master/code/verify-bam.py
+
+
+## Apply demuxlet to separate human and chimp
+
+The main idea is to provide demuxlet a subset of SNP positions that can be used to distinguish between human and chimp samples. 
+
+I'll describe the approach in steps here:
+
+1. Map all samples to human genome
+
+2. Assume that the human individual is genotyped, we can obtain this individual's genotype
+from the 1000 Human Genome project.
+
+3. Construct a pseudo-genotype for chimp using ancestral allele. 
+    * Assume chimp genotype is homozygous
+    * Include only ancestral allele computed with high level of confidence
+    * Include only ancestral allele that is either reference or alternate allele. Perhaps later on we could include the ancestral allele that are either reference or alterante.
+
+
+
+

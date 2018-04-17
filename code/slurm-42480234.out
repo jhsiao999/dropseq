@@ -1,0 +1,34 @@
+------------------- Processing chr 20 -------------------
+
+VCFtools - 0.1.15
+(C) Adam Auton and Anthony Marcketta 2009
+
+Parameters as interpreted:
+	--gzvcf /project2/gilad/joycehsiao/dropseq-pipeline/genotypes-18489/chr20.genotypes.18489.vcf.gz
+	--out /project2/gilad/joycehsiao/dropseq-pipeline/genotypes-18489-tmp/chr20.pseudo
+	--recode
+
+Using zlib version: 1.2.8
+After filtering, kept 1 out of 1 Individuals
+Outputting VCF file...
+After filtering, kept 1744912 out of a possible 1744912 Sites
+Run Time = 37.00 seconds
+
+VCFtools - 0.1.15
+(C) Adam Auton and Anthony Marcketta 2009
+
+Parameters as interpreted:
+	--gzvcf /project2/gilad/joycehsiao/dropseq-pipeline/genotypes-18489/chr20.genotypes.18489.vcf.gz
+	--out /project2/gilad/joycehsiao/dropseq-pipeline/genotypes-18489-tmp/chr20.pseudo
+	--positions /project2/gilad/joycehsiao/dropseq-pipeline/genotypes-18489-tmp/chr20.genotypes.ancestral.positions.list.txt
+	--recode
+
+Using zlib version: 1.2.8
+After filtering, kept 1 out of 1 Individuals
+Outputting VCF file...
+After filtering, kept 990653 out of a possible 1744912 Sites
+Run Time = 24.00 seconds
+[E::get_intv] Failed to parse TBX_VCF, was wrong -p [type] used?
+The offending line was: "chr	C"
+[E::hts_idx_push] Unsorted positions on sequence #1: 64273434 followed by 1
+tbx_index_build failed: /project2/gilad/joycehsiao/dropseq-pipeline/genotypes-18489-pseudo/chr20.pseudo.sorted.vcf.gz

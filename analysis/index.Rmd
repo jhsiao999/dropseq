@@ -8,8 +8,7 @@ output:
 Sharing and documening results for separating human and chimp samples.
 
 
+* [method description 2018-04-17](methods-20180417.html)
 * [method description 2017-12-07](methods-20171207.html)
-
-* [Data preprocessing overview](preprocess-overview.html)
 
 * [human-chimp results 2018-01-24](demuxlet-human-chimp.html)
