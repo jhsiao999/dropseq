@@ -63,7 +63,7 @@ cat $dir_temp/chr${chr_num}.frq.count | \
 paste $dir_temp/chr${chr_num}.alleles.txt $dir_temp/chr${chr_num}.ref.alt.txt |\
   column -s $'\t' -t > $dir_temp/chr${chr_num}.genotypes.tmp.txt
 paste $dir_temp/chr${chr_num}.genotypes.tmp.txt $dir_temp/chr${chr_num}.AA.txt | \
-  awk 'BEGIN{print "#CHROM","POS","ALLELE2","ALLELE2","REF","ALT","AA"}1' \
+  awk 'BEGIN{print "#CHROM","POS","ALLELE1","ALLELE2","REF","ALT","AA"}1' \
   > tmp.${chr_num} && mv tmp.${chr_num} $dir_temp/chr${chr_num}.genotypes.txt
 
 

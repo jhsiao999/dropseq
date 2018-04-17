@@ -14,7 +14,7 @@ chr_num=$1
 
 echo "process chr"${chr_num}
 
-dir_input="/project2/gilad/joycehsiao/dropseq-pipeline/genotypes_phase3"
+dir_input="/project2/gilad/joycehsiao/dropseq-pipeline/genotypes"
 dir_output="/project2/gilad/joycehsiao/dropseq-pipeline/genotypes-18489"
 
 vcftools --gzvcf $dir_input/ALL.chr${chr_num}_GRCh38.genotypes.20170504.vcf.gz \

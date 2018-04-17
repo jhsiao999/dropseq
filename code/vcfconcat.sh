@@ -11,8 +11,8 @@
 #SBATCH --partition=gilad
 #SBATCH --account=pi-gilad
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=5
-#SBATCH --mem-per-cpu=5GB
+#SBATCH --cpus-per-task=1
+#SBATCH --mem-per-cpu=15GB
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=joycehsiao@uchicago.edu
 
@@ -42,6 +42,6 @@ vcf-concat chr1.pseudo.sorted.vcf.gz chr10.pseudo.sorted.vcf.gz \
 
 
 
-tabix -f -p vcf pseudo.sorted.vcf.gz
+#tabix -f -p vcf pseudo.sorted.vcf.gz
 
 

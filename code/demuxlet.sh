@@ -8,7 +8,7 @@
 #SBATCH --account=pi-gilad
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=5
-#SBATCH --mem-per-cpu=5GB
+#SBATCH --mem-per-cpu=10GB
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=joycehsiao@uchicago.edu
 
