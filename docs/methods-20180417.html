@@ -11,7 +11,7 @@
 
 
 
-<title>Home</title>
+<title>Methods description</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +19,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -164,6 +167,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -204,17 +302,44 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">Methods description</h1>
 
 </div>
 
 
-<p>Sharing and documening results for separating human and chimp samples.</p>
+<!-- The file analysis/chunks.R contains chunks that define default settings
+shared across the workflowr files. -->
+<!-- Update knitr chunk options -->
+<!-- Insert the date the file was last updated -->
+<p><strong>Last updated:</strong> 2018-04-17</p>
+<!-- Insert the code version (Git commit SHA1) if Git repository exists and R
+ package git2r is installed -->
+<p><strong>Code version:</strong> 4bc82ab</p>
+<!-- Add your analysis here -->
+<div id="motivation" class="section level2">
+<h2>Motivation</h2>
+<p>For identifying and distingushing single cell samples from human and chimp individuals in a single Dropseq run.</p>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>Pilot data: Yoruba cell line 18489 was included in the human-chimp mix. This is a female individual.</p>
+<p>Human reference: snps.grch37.exons.vcf.gz. For how the human vcf was generated, see here <a href="https://github.com/jdblischak/singleCellSeq/blob/master/code/verify-bam.py" class="uri">https://github.com/jdblischak/singleCellSeq/blob/master/code/verify-bam.py</a></p>
+</div>
+<div id="apply-demuxlet-to-separate-human-and-chimp" class="section level2">
+<h2>Apply demuxlet to separate human and chimp</h2>
+<p>The main idea is to provide demuxlet a subset of SNP positions that can be used to distinguish between human and chimp samples.</p>
+<p>I’ll describe the approach in steps here:</p>
+<ol style="list-style-type: decimal">
+<li><p>Map all samples to human genome</p></li>
+<li><p>Assume that the human individual is genotyped, we can obtain this individual’s genotype from the 1000 Human Genome project.</p></li>
+<li>Construct a pseudo-genotype for chimp using ancestral allele.
 <ul>
-<li><a href="methods-20180417.html">method description 2018-04-17</a></li>
-<li><p><a href="methods-20171207.html">method description 2017-12-07</a></p></li>
-<li><p><a href="demuxlet-human-chimp.html">human-chimp results 2018-01-24</a></p></li>
-</ul>
+<li>Assume chimp genotype is homozygous</li>
+<li>Include only ancestral allele computed with high level of confidence</li>
+<li>Include only ancestral allele that is either reference or alternate allele. Perhaps later on we could include the ancestral allele that are either reference or alterante.</li>
+</ul></li>
+</ol>
+</div>
 
 <hr>
 <p>
@@ -242,6 +367,8 @@ $(document).ready(function () {
 -->
 
 
+</div>
+</div>
 
 </div>
 
